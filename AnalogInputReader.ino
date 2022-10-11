@@ -2,53 +2,40 @@
 
 Servo myservo;
 
-int servoDeg = 180;
-
+int servoDeg = 180; //start deg
+int degTurn = 15;   //deg
+int servoTurnSped = 500; // ms 
+int darkLevel = 400 // upper val for closed
 
 void setup() {
-  // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   myservo.attach(9);
 }
 
 void loop() {
-  // reads the input on analog pin A0 (value between 0 and 1023)
+  
   int analogValue = analogRead(A0);
 
   Serial.print("Analog reading: ");
-  Serial.print(analogValue);   // the raw analog reading
+  Serial.print(analogValue);  
 
-  // We'll have a few threshholds, qualitatively determined
-  /*if (analogValue < 10) {
-    Serial.println(" - Dark");
-  } else if (analogValue < 200) {
-    Serial.println(" - Dim");
-  } else if (analogValue < 500) {
-    Serial.println(" - Light");
-  } else if (analogValue < 800) {
-    Serial.println(" - Bright");
+
+  if (analogValue > darkLevel) {         // higer val of closed range
+    Serial.println(" - close"); 
+    Serial.println(servoDeg);
+    servoDeg += degTurn; 
   } else {
-    Serial.println(" - Very bright");
-  }*/
-
-  if (analogValue > 400) {
-    Serial.println(" - close");
-    Serial.println(servoDeg);
-    servoDeg += 15;
-  } else if(analogValue < 350) {
-    Serial.println("- open");
-    Serial.println(servoDeg);
-    servoDeg -= 15;
+    servoDeg -= degTurn;
   } 
-  if (servoDeg >= 180) {
+  if (servoDeg >= 180) { // completly closed
    delay(5000);
-   servoDeg = 165; // öpaner helt efter total stängning
+   servoDeg = 180 - degTurn; //checking if lightlevel outside is dark
    Serial.println("completly closed");
   }
-  if (servoDeg < 0) {
-    servoDeg = 0; // håller sevons deg positiv
+  if (servoDeg < 0) { // Completly open
+    servoDeg = 0; // keeps servo deg +
     Serial.println("Completly open");
   }
   myservo.write(servoDeg);
-  delay(500);
+  delay(servoTurnSped);
 }
