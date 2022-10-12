@@ -5,7 +5,7 @@ Servo myservo;
 int servoDeg = 180; //start deg
 int degTurn = 15;   //deg
 int servoTurnSped = 500; // ms 
-int darkLevel = 400 // upper val for closed
+int darkLevel = 400; // upper val for closed
 
 void setup() {
   Serial.begin(9600);
